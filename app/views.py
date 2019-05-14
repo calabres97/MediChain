@@ -1,12 +1,9 @@
 import datetime
-import json
 import requests
 
 from flask import render_template, redirect, request
 
 from app import app
-
-NODE_IP = "http://127.0.0.1:8000"
 
 history = []
 
@@ -15,12 +12,11 @@ def fetch_history():
     """
     Fetch all hisory from the blockchain and store it locally
     """
-    get_chain_address = "{}/chain".format(NODE_IP)
+    get_chain_address = "{}/chain".format(get_client_ip())
     response = requests.get(get_chain_address)
     if response.status_code == 200:
         content = []
-        chain = json.loads(response.content)
-        print(chain["chain_"])
+        chain = response.json()
         for block in chain["chain_"]:
             for transaction in block["transactions_"]:
                 transaction["index_"] = block["index_"]
@@ -37,7 +33,7 @@ def index():
     return render_template('index.html',
                            title="MediChain",
                            history=history,
-                           node_address=NODE_IP,
+                           node_address=get_client_ip(),
                            readable_time=timestamp_to_string)
 
 
@@ -58,7 +54,7 @@ def submit_new_history():
         'description': description,
     }
 
-    new_transaction_address = "{}/transaction".format(NODE_IP)
+    new_transaction_address = "{}/transaction".format(get_client_ip())
     requests.post(new_transaction_address,
                   json=object,
                   headers={'Content-Type': 'application/json'})
@@ -67,3 +63,7 @@ def submit_new_history():
 
 def timestamp_to_string(epoch_time):
     return datetime.datetime.fromtimestamp(epoch_time).strftime('%H:%M')
+
+
+def get_client_ip():
+    return "http://" + request.remote_addr + ":8000"
