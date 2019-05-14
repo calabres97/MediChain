@@ -124,9 +124,9 @@ def add_with_existing_peer():
         global blockchain_
         global peers_
 
-        chain_dump = response.json()["chain"]
+        chain_dump = response.json()["chain_"]
         blockchain_ = create_from_dump(chain_dump)
-        peers_.update(response.json()["peers"])
+        peers_.update(response.json()["peers_"])
         return "Registration succesfull", 200
     else:
         return response.content, response.status_code
