@@ -126,8 +126,9 @@ def add_with_existing_peer():
 
         chain_dump = response.json()["chain_"]
         blockchain_ = create_from_dump(chain_dump)
-        if response.json()["peers_"] not in peers_:
-            peers_.append(response.json()["peers_"])
+        for peer_ in response.json()["peers_"]:
+            if peer_ not in peers_:
+                peers_.append(response.json()["peers_"])
         return "Registration succesfull", 200
     else:
         return response.content, response.status_code
