@@ -20,6 +20,7 @@ def fetch_history():
     if response.status_code == 200:
         content = []
         chain = json.loads(response.content)
+        print(chain["chain_"])
         for block in chain["chain_"]:
             for transaction in block["transactions_"]:
                 transaction["index_"] = block["index_"]
