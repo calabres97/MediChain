@@ -49,11 +49,14 @@ def create_from_dump(chain_):
 
 
 def announce_new_block(block_):
+    headers = {
+        'Content-Type': "application/json"
+    }
     for peer_ in peers_:
         url = "{}block".format(peer_)
-        requests.post(url,
-                      data=json.dumps(block_.__dict__,
-                                      sort_keys=True))
+        print(requests.post(url,
+                            data=json.dumps(block_.__dict__, sort_keys=True),
+                            headers=headers))
 
 
 @app.route('/transaction', methods=['POST'])
