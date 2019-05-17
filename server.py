@@ -65,7 +65,8 @@ def transaction():
     fields = ["author",
               "patient",
               "illness",
-              "description"]
+              "description",
+              "timestamp"]
     for field in fields:
         if not transaction_data.get(field):
             return "Invalid transaction data", 404
@@ -85,6 +86,32 @@ def chain():
     return json.dumps({"length_": len(chain_),
                        "chain_": chain_,
                        "peers_": list(peers_)})
+
+
+@app.route('/transactions', methods=['GET'])
+def transactions():
+    patient_ = request.args.get('patient', default=None)
+    consensus()
+    transactions_ = []
+    for block_ in blockchain_.chain_:
+        if patient_ is not None:
+            for tx_ in block_.transactions_:
+                if patient_ == tx_['patient']:
+                    transactions_.append(tx_)
+
+    return json.dumps({"length_": len(transactions_),
+                       "transactions_": transactions_,
+                       "peers_": list(peers_)})
+
+
+@app.route('/patients', methods=['GET'])
+def patients():
+    patients_ = []
+    for block_ in blockchain_.chain_:
+        for tx_ in block_.transactions_:
+            if tx_['patient'] not in patients_:
+                patients_.append(tx_['patient'])
+    return json.dumps(patients_)
 
 
 @app.route('/mine', methods=['GET'])

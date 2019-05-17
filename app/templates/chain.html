@@ -1,0 +1,95 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div style="margin: 20px;">
+        <a href="/"><button>Volver a Inicio</button></a>
+        <a href="{{node_address}}/mine" target="_blank"><button>Realizar peticion de minado</button></a>
+        <a href="/chain"><button>Recargar</button></a>
+    </div>
+
+	<div style="margin: 20px;">
+        {% for transaction in chain%}
+            <h1>Transaccion del bloque {{ transaction.index_ }}:</h1>
+            <div class="post_box-header">
+              <div class="name-header">Autor: {{ transaction.author }}</div>
+               <div class="name-header">Paciente: {{ transaction.patient }}</div>
+               <div class="name-header">Enfermedad: {{ transaction.illness }}</div>
+              <div class="post_box-subtitle"> Posted at </div>
+            </div>
+            <div>
+              <div class="post_box-body">
+                  <h3>Descripción</h3>
+                 <p>{{transaction.description}}</p>
+              </div>
+            </div>
+            <br>
+            <h2>Hash: {{ transaction.hash_ }}</h2>
+            <hr>
+        {% endfor %}
+
+	<style>
+		.post_box {
+		    background: #fff;
+		    padding: 12px 0px 0px 12px;
+		    margin-top: 0px;
+		    margin-bottom: 8px;
+		    border-top: 1px solid #f0f0f0;
+		}
+
+		.post_box-header {
+		    padding-bottom: 12px;
+		}
+
+		.post_box-avatar {
+		    width: 38px;
+		    height: 38px;
+		    border-radius: 50%;
+		    display: flex;
+		    justify-content: center;
+		    align-items: center;
+		    color: white;
+		    font-size: 22px;
+		    float: left;
+		    margin-right: 16px;
+		    border: 1px solid #fff;
+		    box-shadow: 0px 0px 0px 2px #f00;
+		}
+
+		.post_box-avatar::after {
+		    content:"";
+		    display:block;
+		}
+
+		.post_box-name {
+		    font-weight: bold;
+		}
+
+		.post_box-subtitle {
+		    color: #777;
+		}
+
+		.post_box-body {
+		    margin-top: 16px;
+		    margin-bottom: 8px;
+		}
+
+		.post_box-options {
+		    float: right;
+		}
+		.option-btn {
+		    background: #f8f8f8;
+		    border: none;
+		    color: #2c3e50;
+		    padding: 7px;
+		    cursor: pointer;
+		    font-size: 14px;
+		    margin-left: 2px;
+		    margin-right: 2px;
+		    outline: none;
+		    height: 42px;
+		}
+	</style>
+    </div>
+{% endblock %}
