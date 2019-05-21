@@ -1,111 +1,90 @@
-<!-- extend base layout -->
 {% extends "base.html" %}
 
 {% block content %}
-	<br>
-
-    <a href="/"><button>Volver al inicio</button></a>
-	<a href="{{node_address}}/mine" target="_blank"><button>Realizar peticion de minado</button></a>
-	<a href="/history?patient={{ patient }}"><button>Actualizar</button></a>
-
-    <br>
-
-	<center>
-	<form action="/submit" id="textform" method="post">
-        <input type="text" name="author" placeholder="Introduce your name">
-        <br>
-        <input type="text" readonly value={{ patient }}>
-        <input type="hidden" name="patient" value="{{ patient }}">
-        <br>
-        <input type="text" name="illness" placeholder="Introduce his/her illness">
-        <br>
-        <textarea name="description" rows="4" cols="50" placeholder="Just write whatever you want to..."></textarea>
-        <input type="submit" value="Post">
-	</form>
-	</center>
-
-
-
-	<div style="margin: 20px;">
-
-    {% for register in history %}
-    <div class="post_box">
-	   <div class="post_box-header">
-	      <div class="name-header">Autor: {{ register.author }}</div>
-           <div class="name-header">Paciente: {{ register.patient }}</div>
-           <div class="name-header">Enfermedad: {{ register.illness }}</div>
-	      <div class="post_box-subtitle"> Posted at <i>{{ readable_time(register.timestamp) }}</i></div>
-	   </div>
-	   <div>
-	      <div class="post_box-body">
-              Descripción
-	         <p>{{register.description}}</p>
-	      </div>
-	   </div>
-	</div>
-	{% endfor %}
-
-	<style>
-		.post_box {
-		    background: #fff;
-		    padding: 12px 0px 0px 12px;
-		    margin-top: 0px;
-		    margin-bottom: 8px;
-		    border-top: 1px solid #f0f0f0;
-		}
-
-		.post_box-header {
-		    padding-bottom: 12px;
-		}
-
-		.post_box-avatar {
-		    width: 38px;
-		    height: 38px;
-		    border-radius: 50%;
-		    display: flex;
-		    justify-content: center;
-		    align-items: center;
-		    color: white;
-		    font-size: 22px;
-		    float: left;
-		    margin-right: 16px;
-		    border: 1px solid #fff;
-		    box-shadow: 0px 0px 0px 2px #f00;
-		}
-
-		.post_box-avatar::after {
-		    content:"";
-		    display:block;
-		}
-
-		.post_box-name {
-		    font-weight: bold;
-		}
-
-		.post_box-subtitle {
-		    color: #777;
-		}
-
-		.post_box-body {
-		    margin-top: 16px;
-		    margin-bottom: 8px;
-		}
-
-		.post_box-options {
-		    float: right;
-		}
-		.option-btn {
-		    background: #f8f8f8;
-		    border: none;
-		    color: #2c3e50;
-		    padding: 7px;
-		    cursor: pointer;
-		    font-size: 14px;
-		    margin-left: 2px;
-		    margin-right: 2px;
-		    outline: none;
-		    height: 42px;
-		}
-	</style>
+    <div class="container-fluid">
+        {% if exists(patient) %}
+            <div class="row">
+                <div class="col-md-4 text-center mt-3 mb-3">
+                    <a class="btn btn-success" href="/" role="button">Volver al inicio</a>
+                </div>
+                <div class="col-md-4 text-center mt-3 mb-3">
+                    <a class="btn btn-success" href="{{node_address}}/mine" target="_blank" role="button">Realizar peticion de minado</a>
+                </div>
+                <div class="col-md-4 text-center mt-3 mb-3">
+                    <a class="btn btn-success" href="/history?patient={{ patient }}" role="button">Actualizar</a>
+                </div>
+            </div>
+        {% else %}
+            <div class="row">
+                <div class="col-md-6 text-center mt-3 mb-3">
+                    <a class="btn btn-success" href="/" role="button">Volver al inicio</a>
+                </div>
+                <div class="col-md-6 text-center mt-3 mb-3">
+                    <a class="btn btn-success" href="{{node_address}}/mine" target="_blank" role="button">Realizar peticion de minado</a>
+                </div>
+            </div>
+        {% endif %}
     </div>
+
+    <div class="container-fluid">
+        <div class="row text-center">
+            <h2 class="col-md-12">Crea un nuevo registro {% if exists(patient) %}para {{ patient }}{% endif %}</h2>
+        </div>
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <form action="/submit" method="post">
+                    <div class="form-group">
+                        <label for="doctor">Introduzca su nombre (médico):</label>
+                        <input type="text" class="form-control" id="doctor" placeholder="Jane Doe" name="doctor">
+                    </div>
+                    <div class="form-group">
+                        {% if exists(patient) %}
+                            <label for="patient">Nombre del paciente:</label>
+                            <input type="text" readonly class="form-control" value={{ patient }}>
+                            <input type="hidden" name="patient" value="{{ patient }}">
+                        {% else %}
+                            <label for="patient">Nombre del paciente:</label>
+                            <input type="text" name="patient" class="form-control" placeholder="Introduzca el nombre del paciente">
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="illness">Problema del paciente:</label>
+                        <input type="text" class="form-control" id="illness" placeholder="Introduzca el nombre del paciente (dolor de cabeza, etc)" name="illness">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Descripción detallada</label>
+                        <textarea class="form-control" id="description" rows="5" name="description"></textarea>
+                    </div>
+                    <input class="btn btn-primary" type="submit" value="Registrar">
+                </form>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>
+
+    {% if exists(patient) %}
+        <div style="margin: 20px;">
+        <h2>Historial medico de {{ patient }}</h2>
+
+        {% for register in history %}
+        <div class="post_box">
+           <div class="post_box-header">
+              <div class="name-header">Doctor/a: {{ register.doctor }}</div>
+               <div class="name-header">Paciente: {{ register.patient }}</div>
+               <div class="name-header">Enfermedad: {{ register.illness }}</div>
+              <div class="post_box-subtitle"> Posted at <i>{{ readable_time(register.timestamp) }}</i></div>
+           </div>
+           <div>
+              <div class="post_box-body">
+                  Descripción
+                 <p>{{register.description}}</p>
+              </div>
+           </div>
+        </div>
+        {% endfor %}
+
+
+        </div>
+    {% endif %}
 {% endblock %}

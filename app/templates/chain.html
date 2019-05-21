@@ -9,11 +9,15 @@
         <a href="/chain"><button>Recargar</button></a>
     </div>
 
+    <div style="margin: 20px;">
+        <a href="/peers"><button>Configurar nodos de la cadena</button></a>
+    </div>
+
 	<div style="margin: 20px;">
         {% for transaction in chain%}
             <h1>Transaccion del bloque {{ transaction.index_ }}:</h1>
             <div class="post_box-header">
-              <div class="name-header">Autor: {{ transaction.author }}</div>
+              <div class="name-header">Doctor/a: {{ transaction.doctor }}</div>
                <div class="name-header">Paciente: {{ transaction.patient }}</div>
                <div class="name-header">Enfermedad: {{ transaction.illness }}</div>
               <div class="post_box-subtitle"> Posted at </div>

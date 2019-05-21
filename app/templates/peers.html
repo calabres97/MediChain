@@ -1,0 +1,46 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6 text-center mt-3 mb-3">
+            <a class="btn btn-success" href="/" role="button">Volver al inicio</a>
+        </div>
+        <div class="col-md-6 text-center mt-3 mb-3">
+            <a class="btn btn-success" href="/chain" role="button">Ver la cadena</a>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row text-center">
+            <h1 class="col-md-12">Registrar un nuevo nodo en la cadena</h1>
+        </div>
+        <div class="row text-center">
+            <form action="/set_peer" id="textform" method="post" class="col-md-12">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-4"></div>
+                        <div class="input-group input-group-sm col-md-4">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon3">Ejemplo: http://127.0.0.1:8000</span>
+                            </div>
+                            <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" name="peer">
+                        </div>
+                        <div class="col-md-4"></div>
+                    </div>
+                    <br>
+                    <input class="btn btn-primary" type="submit" value="Submit">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div style="margin: 20px;">
+        <h1>Nodos conectados en la red:</h1>
+        {% for peer in peers %}
+            <h3>{{ peer }}</h3>
+            <br>
+            <hr>
+        {% endfor %}
+    </div>
+{% endblock %}
