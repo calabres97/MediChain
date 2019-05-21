@@ -1,4 +1,3 @@
-<!-- extend base layout -->
 {% extends "base.html" %}
 
 {% block content %}
@@ -15,25 +14,25 @@
                 {% if is_empty(patients) %}
                     <div class="container-fluid mt-3">
                         <div class="row mb-3">
-                            <div class="col-md-4"></div>
-                            <div class="col-md-4 text-center">
-                                <p>No hay pacientes en la cadena. Crea un nuevo registro o haz una peticion de actualizacion de la cadena si
-                                    ya has creado uno pero aun no lo ves.</p>
+                            <div class="col-md-2"></div>
+                            <div class="col-md-8 text-center">
+                                <p>No hay pacientes en la cadena. Crea un nuevo registro o haz una petición de actualización de la cadena si
+                                    ya has creado uno pero aún no lo ves.</p>
                             </div>
-                            <div class="col-md-4"></div>
+                            <div class="col-md-2"></div>
                         </div>
                         <div class="container-fluid">
                             <div class="row">
-                                <div class="col-md-4"></div>
-                                <div class="col-md-4">
+                                <div class="col-md-2"></div>
+                                <div class="col-md-8">
                                     <div class="row mb-3 text-center">
                                         <div class="col-md-12">
-                                            <a class="btn btn-success" href="/history?new=1" role="button">Crear nuevo registro medico</a>
+                                            <a class="btn btn-success" href="/history?new=1" role="button">Crear nuevo registro médico</a>
                                         </div>
                                     </div>
                                     <div class="row mb-3 text-center">
                                         <div class="col-md-12">
-                                            <a class="btn btn-success" href="{{node_address}}/mine" target="_blank" role="button">Realizar peticion de minado</a>
+                                            <a class="btn btn-success" href="{{node_address}}/mine" target="_blank" role="button">Realizar petición de minado</a>
                                         </div>
                                     </div>
                                     <div class="row mb-3 text-center">
@@ -42,15 +41,15 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4"></div>
+                                <div class="col-md-2"></div>
                             </div>
                         </div>
                     </div>
                 {% else %}
                     <div class="container-fluid mt-3">
                         <div class="row text-center">
-                            <div class="col-md-4"></div>
-                            <form action="/history" method="post" class="col-md-4">
+                            <div class="col-md-2"></div>
+                            <form action="/history" method="post" class="col-md-8">
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <label class="input-group-text" for="inputGroupSelect01">Paciente</label>
@@ -63,12 +62,12 @@
                                     <input class="btn btn-primary" type="submit" value="Ver historial médico">
                                 </div>
                             </form>
-                            <div class="col-md-4"></div>
+                            <div class="col-md-2"></div>
                         </div>
                         <div class="row text-center mb-3">
                             <div class="col-md-4"></div>
                             <div class="col-md-4">
-                                <a class="btn btn-success" href="/history?new=1" role="button">Crear nuevo registro medico</a>
+                                <a class="btn btn-success" href="/history?new=1" role="button">Crear nuevo registro médico</a>
                             </div>
                             <div class="col-md-4"></div>
                         </div>

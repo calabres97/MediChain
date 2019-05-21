@@ -8,7 +8,7 @@
                     <a class="btn btn-success" href="/" role="button">Volver al inicio</a>
                 </div>
                 <div class="col-md-4 text-center mt-3 mb-3">
-                    <a class="btn btn-success" href="{{node_address}}/mine" target="_blank" role="button">Realizar peticion de minado</a>
+                    <a class="btn btn-success" href="{{node_address}}/mine" target="_blank" role="button">Realizar petición de minado</a>
                 </div>
                 <div class="col-md-4 text-center mt-3 mb-3">
                     <a class="btn btn-success" href="/history?patient={{ patient }}" role="button">Actualizar</a>
@@ -20,23 +20,22 @@
                     <a class="btn btn-success" href="/" role="button">Volver al inicio</a>
                 </div>
                 <div class="col-md-6 text-center mt-3 mb-3">
-                    <a class="btn btn-success" href="{{node_address}}/mine" target="_blank" role="button">Realizar peticion de minado</a>
+                    <a class="btn btn-success" href="{{node_address}}/mine" target="_blank" role="button">Realizar petición de minado</a>
                 </div>
             </div>
         {% endif %}
     </div>
-
     <div class="container-fluid">
         <div class="row text-center">
             <h2 class="col-md-12">Crea un nuevo registro {% if exists(patient) %}para {{ patient }}{% endif %}</h2>
         </div>
         <div class="row">
-            <div class="col-md-4"></div>
-            <div class="col-md-4">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
                 <form action="/submit" method="post">
                     <div class="form-group">
-                        <label for="doctor">Introduzca su nombre (médico):</label>
-                        <input type="text" class="form-control" id="doctor" placeholder="Jane Doe" name="doctor">
+                        <label for="doctor">Doctor:</label>
+                        <input type="text" class="form-control" id="doctor" placeholder="Ejemplo: Jane Doe" name="doctor">
                     </div>
                     <div class="form-group">
                         {% if exists(patient) %}
@@ -50,7 +49,7 @@
                     </div>
                     <div class="form-group">
                         <label for="illness">Problema del paciente:</label>
-                        <input type="text" class="form-control" id="illness" placeholder="Introduzca el nombre del paciente (dolor de cabeza, etc)" name="illness">
+                        <input type="text" class="form-control" id="illness" placeholder="Ejemplo: dolor de cabeza, etc" name="illness">
                     </div>
                     <div class="form-group">
                         <label for="description">Descripción detallada</label>
@@ -59,32 +58,29 @@
                     <input class="btn btn-primary" type="submit" value="Registrar">
                 </form>
             </div>
-            <div class="col-md-4"></div>
+            <div class="col-md-2"></div>
         </div>
     </div>
-
     {% if exists(patient) %}
-        <div style="margin: 20px;">
-        <h2>Historial medico de {{ patient }}</h2>
-
-        {% for register in history %}
-        <div class="post_box">
-           <div class="post_box-header">
-              <div class="name-header">Doctor/a: {{ register.doctor }}</div>
-               <div class="name-header">Paciente: {{ register.patient }}</div>
-               <div class="name-header">Enfermedad: {{ register.illness }}</div>
-              <div class="post_box-subtitle"> Posted at <i>{{ readable_time(register.timestamp) }}</i></div>
-           </div>
-           <div>
-              <div class="post_box-body">
-                  Descripción
-                 <p>{{register.description}}</p>
-              </div>
-           </div>
-        </div>
-        {% endfor %}
-
-
+        <div class="container-fluid">
+            <div class="row text-center">
+                <h2 class="col-md-12 mt-10">Historial médico de {{ patient }}</h2>
+            </div>
+            {% for register in history %}
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <div class="card bg-light mb-3 w-100">
+                            <div class="card-body">
+                                <h4 class="card-title">{{ register.illness }}</h4>
+                                <h6 class="card-subtitle mb-2 text-muted">Registrado por {{ register.doctor }} a las {{ readable_time(register.timestamp) }}</h6>
+                                <p class="card-text">{{ register.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+            {% endfor %}
         </div>
     {% endif %}
 {% endblock %}
