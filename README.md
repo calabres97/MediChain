@@ -34,3 +34,8 @@ Una vez arrancado el nodo deberás registrarlo dentro de la aplicación en el ap
 
 Frontend de la aplicación: http://dirIp:5000/ENDPOINT  
 Backend de la aplicación: http://dirIp:8000/ENDPOINT (el puerto puede variar en función de su configuración)
+
+## Integrantes del equipo:
+Enrique Hernández Calabrés  
+Daniel Alcón Martín
+
