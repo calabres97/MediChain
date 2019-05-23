@@ -12,6 +12,14 @@ class Block:
         self.previous_hash = previous_hash
         self.nonce_ = nonce_
 
+    def __str__(self):
+        if hasattr(self, "hash_"):
+            return "Indice => " + "{}".format(self.index_) + " ¡¡ transacciones => " + "{}".format(
+                len(self.transactions_)) + " ¡¡ hash => " + self.hash_
+        else:
+            return "Indice => " + "{}".format(self.index_) + " ¡¡ transacciones => " + "{}".format(
+                len(self.transactions_)) + " ¡¡ hash => no hash"
+
     def compute(self):
         """
         Return the hash of the block
@@ -52,7 +60,8 @@ class Chain:
 
         if previous_hash != block_.previous_hash:
             return False
-        elif not Chain.is_valid_pow(block_, pow_):
+
+        if not Chain.is_valid_pow(block_, pow_):
             return False
 
         block_.hash_ = pow_
@@ -71,10 +80,14 @@ class Chain:
         result = True
         previous_hash = "0"
 
-        for block_ in chain_:
-            hash_ = block_.hash_
-            delattr(block_, "hash")
-            if not cls.is_valid_pow(block_, block_.hash_) or previous_hash != block_.previous_hash:
+        for dict_block in chain_:
+            hash_ = dict_block["hash_"]
+            block_ = Block(dict_block["index_"],
+                           dict_block["transactions_"],
+                           dict_block["timestamp_"],
+                           dict_block["previous_hash"])
+            block_.nonce_ = dict_block["nonce_"]
+            if not cls.is_valid_pow(block_, hash_) or previous_hash != block_.previous_hash:
                 result = False
                 break
 
@@ -98,4 +111,3 @@ class Chain:
         self.transactions_remaining = []
 
         return new_block
-

@@ -60,7 +60,7 @@ def index():
     return render_template('index.html',
                            title="MediChain",
                            patients=patients,
-                           node_address=get_node_ip(),
+                           node_address=ip,
                            is_empty=is_empty,
                            exists=exists,
                            ip=ip)
@@ -87,7 +87,7 @@ def history():
                            title="MediChain",
                            history=history,
                            patient=patient_,
-                           node_address=get_node_ip(),
+                           node_address=ip,
                            readable_time=timestamp_to_string,
                            exists=exists)
 
@@ -98,7 +98,7 @@ def chain():
     return render_template('chain.html',
                            title="MediChain",
                            chain=chain,
-                           node_address=get_node_ip(),
+                           node_address=ip,
                            readable_time=timestamp_to_string)
 
 
@@ -155,18 +155,12 @@ def peers():
     return render_template('peers.html',
                            title="MediChain | Peers",
                            peers=peers,
-                           node_address=get_node_ip,
+                           node_address=ip,
                            is_empty=is_empty)
 
 
 def timestamp_to_string(epoch_time):
     return datetime.datetime.fromtimestamp(epoch_time).strftime('%H:%M')
-
-
-def get_node_ip():
-    url_ = request.host_url.split(":")
-    final_url = url_[1][2:]
-    return "http://" + final_url + ":8000"
 
 
 def is_empty(obj):

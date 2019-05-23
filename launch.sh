@@ -4,6 +4,8 @@ python3 -m venv venv
 
 . venv/bin/activate
 
+pip3 install -r requirements.txt
+
 export FLASK_APP=server.py
 PORT=8000
 
@@ -16,10 +18,11 @@ then
 	do
 		NEW_PORT=$(($PORT+$i))
 		flask run --host=0.0.0.0 --port $NEW_PORT & > /dev/null 2>&1
+		sleep 1
 		curl -X POST \
-		http://127.0.0.1:$PORT/new_peer \
+		http://$1:$NEW_PORT/add_with_existing_peer \
 		-H 'Content-Type: application/json' \
-		-d '{"node_ip": "http://127.0.0.1:'"$NEW_PORT"'"}' \
+		-d '{"node_ip": "http://'"$1"':'"$PORT"'"}' \
 		& > /dev/null 2>&1
 	done
 fi

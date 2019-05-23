@@ -10,9 +10,32 @@
         </div>
     </div>
 
-    <div class="container-fluid">
+    <div class="container-fluid mt-5">
         <div class="row text-center">
             <h1 class="col-md-12">Registrar un nuevo nodo en la cadena</h1>
+        </div>
+        <div class="row text-center">
+            <form action="/new_peer" id="textform" method="post" class="col-md-12">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="input-group input-group-sm col-md-8">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon3">Ejemplo: http://127.0.0.1:8000</span>
+                            </div>
+                            <input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3" name="peer">
+                        </div>
+                        <div class="col-md-2"></div>
+                    </div>
+                    <br>
+                    <input class="btn btn-primary" type="submit" value="Submit">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="container-fluid mt-5">
+        <div class="row text-center">
+            <h1 class="col-md-12">Cambiar nodo de obtención de datos</h1>
         </div>
         <div class="row text-center">
             <form action="/set_peer" id="textform" method="post" class="col-md-12">
@@ -33,9 +56,9 @@
             </form>
         </div>
     </div>
-
     <div style="margin: 20px;">
-        <h3>Nodos conectados en la red:</h3>
+        <h3>Actualmente mostrando información del nodo {{ node_address }}</h3>
+        <h4>Nodos conectados en la red:</h4>
         <ul class="list-group list-group-flush">
             {% for peer in peers %}
                 <li class="list-group-item">{{ peer }}</li>

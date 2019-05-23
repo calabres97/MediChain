@@ -11,6 +11,7 @@ blockchain_ = node.Chain()
 blockchain_.first_block()
 
 peers_ = set()
+calleds_ = set()
 
 
 def consensus():
@@ -19,12 +20,21 @@ def consensus():
     current_len = len(blockchain_.chain_)
 
     for node_ in peers_:
-        response = requests.get("{}chain".format(node_))
-        length_ = response.json()["length_"]
-        chain_ = response.json()["chain_"]
-        if length_ > current_len and blockchain_.check_validity(chain_):
-            current_len = length_
-            longest_chain = chain_
+        if node_ not in calleds_:
+            calleds_.add(node_)
+            if node_[-1:] == "/":
+                response = requests.get("{}chain".format(node_))
+            else:
+                response = requests.get("{}/chain".format(node_))
+
+            if response.status_code == 200:
+                length_ = response.json()["length_"]
+                chain_ = response.json()["chain_"]
+                if length_ > current_len and blockchain_.check_validity(chain_):
+                    current_len = length_
+                    longest_chain = chain_
+        else:
+            calleds_.remove(node_)
     if longest_chain:
         blockchain_ = longest_chain
         return True
@@ -32,7 +42,7 @@ def consensus():
 
 
 def create_from_dump(chain_):
-    new_blockchain = node.Chain()
+    blockchain_ = node.Chain()
     for index, block_data in enumerate(chain_):
         block_ = node.Block(block_data["index_"],
                             block_data["transactions_"],
@@ -40,23 +50,29 @@ def create_from_dump(chain_):
                             block_data["previous_hash"])
         pow_ = block_data["hash_"]
         if index > 0:
-            added = new_blockchain.insert_block(block_, pow_)
+            block_.nonce_ = block_data["nonce_"]
+            added = blockchain_.insert_block(block_, pow_)
             if not added:
                 raise Exception("The chain dump is wrong")
         else:
-            new_blockchain.chain_.append(block_)
-    return new_blockchain
+            block_ = node.Block(0, [], block_data["timestamp_"], "0")
+            block_.hash_ = block_.compute()
+            blockchain_.chain_.append(block_)
+    return blockchain_
 
 
 def announce_new_block(block_):
     headers = {
         'Content-Type': "application/json"
     }
-    for peer_ in peers_:
-        url = "{}block".format(peer_)
-        print(requests.post(url,
-                            data=json.dumps(block_.__dict__, sort_keys=True),
-                            headers=headers))
+    for node_ in peers_:
+        if node_[-1:] == "/":
+            url = "{}block".format(node_)
+        else:
+            url = "{}/block".format(node_)
+        requests.post(url,
+                      data=json.dumps(block_.__dict__, sort_keys=True),
+                      headers=headers)
 
 
 @app.route('/transaction', methods=['POST'])
@@ -117,8 +133,9 @@ def patients():
 @app.route('/peers', methods=['GET'])
 def get_peers():
     peers_connected = []
-    if len(peers_) > 0:
-        peers_connected = [list(peers_)]
+    for peer_ in peers_:
+        peers_connected.append(peer_)
+
     if request.host_url not in peers_connected:
         peers_connected.append(request.host_url)
     return json.dumps(peers_connected)
@@ -138,10 +155,7 @@ def add_new_peer():
     node_ip = request.get_json()["node_ip"]
     if not node_ip:
         return "Invalid data", 400
-
     peers_.add(node_ip)
-    print("Peeeeeers " + request.host_url)
-    print(peers_)
     return chain()
 
 
@@ -150,6 +164,8 @@ def add_with_existing_peer():
     node_ip = request.get_json()["node_ip"]
     if not node_ip:
         return "Invalid data", 400
+
+    my_ip = request.host_url
 
     data = {
         "node_ip": request.host_url
@@ -167,12 +183,11 @@ def add_with_existing_peer():
         global peers_
         chain_dump = response.json()["chain_"]
         blockchain_ = create_from_dump(chain_dump)
-        peers_.add(request.url_root)
+        if node_ip not in peers_:
+            peers_.add(node_ip)
         for peer_ in response.json()['peers_']:
-            if peer_ != request.host_url:
+            if peer_ != my_ip:
                 peers_.add(peer_)
-        print("Peeeeeers " + request.host_url)
-        print(peers_)
         return "Registration succesfull", 200
     else:
         return response.content, response.status_code
@@ -185,7 +200,7 @@ def verify_block():
                         block_data["transactions_"],
                         block_data["timestamp_"],
                         block_data["previous_hash"])
-
+    block_.nonce_ = block_data["nonce_"]
     pow_ = block_data["hash_"]
     added = blockchain_.insert_block(block_, pow_)
     if not added:
