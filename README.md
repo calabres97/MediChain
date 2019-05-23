@@ -1,9 +1,15 @@
 # Práctica para sistemas distrbuidos
 
-Aplicación blockchain para la práctica opcional de la asignatura Sistemas Distribuidos de la Universidad de Salamanca.
+Aplicación blockchain para la práctica opcional de la asignatura Sistemas Distribuidos de la Universidad de Salamanca.  
+  
+La práctica consiste en un sistema médico distribuido basado en blockchain e implementado en
+python. Su función es la de guardar un registro médico para los pacientes, en el que cada trasnacción 
+de la cadena representa una entrada en su historial. Esta cadena además se encuentra repartida de forma 
+distribuida entre todos los nodos de la red, que llevan a cabo una función de consenso para que todos
+dispongan de la misma información.
 
 ## Pasos previos
-#### Requerimientos:
+#### Requisitos:
 Es necesario instalar lo siguiente en el ordenador para poder ejecutar la aplicación correctamente:
 > $ sudo apt-get update  
 > $ sudo apt-get install git  
