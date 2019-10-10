@@ -25,7 +25,7 @@ Una vez instalado todo lo necesario para que funcione la aplicación, sólo ser�
 
 ### Adicional:
 Si se desea arrancar un nodo más para que se una a la red blockchain cuando esta ya está iniciada, necesitará ejecutar 
-la siguiente órden:
+la siguiente orden:
 > $ flask run --host=0.0.0.0 --port=$PUERTO_DESEADO &  
 
 Una vez arrancado el nodo deberás registrarlo dentro de la aplicación en el apartado de registrar nuevos nodos.
